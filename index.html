@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Late for the Train — Static Arrivals</title>
+  <link rel="stylesheet" href="./arrivals.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script data-goatcounter="https://joshuaseek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+  <main class="screen" id="screen">
+    <header class="top-bar">
+      <div>
+        <h1>Late for the Train</h1>
+        <div class="subtitle"><span id="context-label">Next arrival at</span> <span id="station-code">FLG</span></div>
+      </div>
+      <div class="controls">
+        <label class="control">
+          View
+          <select id="view-mode-select">
+            <option value="station">Station</option>
+            <option value="train">Train</option>
+          </select>
+        </label>
+        <label class="control">
+          Display
+          <select id="display-select">
+            <option value="cards">Cards</option>
+            <option value="split">Split-flap</option>
+          </select>
+        </label>
+        <label class="control">
+          Map style
+          <select id="map-style">
+            <option value="light">Light</option>
+            <option value="slate">Slate</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label class="control">
+          Station
+          <input id="station-input" maxlength="4" placeholder="FLG" />
+        </label>
+        <label class="control is-hidden" id="train-select-control">
+          Train
+          <select id="train-select"></select>
+        </label>
+        <button id="apply-station" class="button">Update</button>
+        <button id="toggle-night" class="button">Night mode</button>
+        <button id="toggle-controls" class="button button-ghost">Hide controls</button>
+      </div>
+    </header>
+
+    <button id="show-controls" class="button button-ghost floating-controls is-hidden">
+      Show controls
+    </button>
+
+    <section class="hero" id="hero-section" aria-live="polite">
+      <div class="hero-card">
+        <div class="hero-label">Next arrival</div>
+        <div class="hero-main" id="next-time">--</div>
+        <div class="hero-detail" id="next-route">Loading...</div>
+        <div class="hero-sub" id="next-status"></div>
+      </div>
+      <div class="hero-meta">
+        <div id="next-origin"></div>
+        <div id="next-destination"></div>
+        <div id="next-source"></div>
+      </div>
+    </section>
+
+    <section class="upcoming" id="upcoming-section">
+      <h2>Upcoming arrivals</h2>
+      <div id="upcoming-list" class="upcoming-list"></div>
+    </section>
+
+    <section class="split-flap is-hidden" id="split-section" aria-live="polite">
+      <h2>Arrivals</h2>
+      <div id="split-list" class="split-list"></div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-row">
+        <div id="refresh-time">Last updated: --</div>
+        <div id="stale-indicator" class="stale"></div>
+      </div>
+      <p class="data-note">
+        Data source: <strong>api-v3.amtraker.com</strong> (unofficial). Browsers may block direct requests due to
+        CORS. If that happens, point this page at a lightweight proxy instead (example URLs:
+        <code>https://your-worker.example.com/v3/trains</code> for a Cloudflare Worker or
+        <code>/.netlify/functions/amtraker?path=/v3/trains</code> for a Netlify Function).
+      </p>
+    </footer>
+  </main>
+
+  <script
+    defer
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module" src="./arrivals.js"></script>
+</body>
+</html>
