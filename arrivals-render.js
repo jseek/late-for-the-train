@@ -394,16 +394,14 @@ export function initArrivalsRenderer(elements) {
     `;
     timeline.appendChild(previous);
 
-    const current = document.createElement("button");
-    current.type = "button";
+    const current = document.createElement("div");
     current.className = "timeline-current";
-    current.setAttribute("aria-expanded", "false");
     const detailsId = `train-position-${nextStop?.trainNum || "current"}-${Date.now()}`;
-    current.setAttribute("aria-controls", detailsId);
+    const toggleId = `${detailsId}-toggle`;
     current.innerHTML = `
       <div class="timeline-node-wrap"><span class="timeline-node timeline-node-live" aria-hidden="true"></span></div>
       <div class="timeline-content">
-        <div class="timeline-title">${currentTrainName}</div>
+        <div class="timeline-title"><button type="button" class="timeline-train-toggle" id="${toggleId}" aria-expanded="false" aria-controls="${detailsId}">${currentTrainName}</button></div>
         <div class="timeline-subtitle">${nextStop ? `${formatEta(nextStop.etaMinutes)} to ${nextStationName}` : "No next station available"}</div>
       </div>
     `;
@@ -423,9 +421,10 @@ export function initArrivalsRenderer(elements) {
     mapAttribution.textContent = mapAttributionText("dark");
     mapPanel.appendChild(mapAttribution);
 
-    current.addEventListener("click", () => {
-      const isExpanded = current.classList.toggle("is-expanded");
-      current.setAttribute("aria-expanded", String(isExpanded));
+    const trainToggle = current.querySelector(".timeline-train-toggle");
+    trainToggle?.addEventListener("click", () => {
+      const isExpanded = trainToggle.classList.toggle("is-expanded");
+      trainToggle.setAttribute("aria-expanded", String(isExpanded));
       mapPanel.hidden = !isExpanded;
       if (isExpanded && !mapEl.dataset.mapReady) {
         requestAnimationFrame(() => {
